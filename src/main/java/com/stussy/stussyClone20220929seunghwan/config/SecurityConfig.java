@@ -1,5 +1,7 @@
 package com.stussy.stussyClone20220929seunghwan.config;
 
+import com.stussy.stussyClone20220929seunghwan.service.PrincipalDetailsService;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,7 +23,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()  // 그리고 
                 // and() 가 없다면 http.formLogin() 으로 다시 지정해줘야함
                 .formLogin()  // 폼로그인 방식으로 인증을 해라
-                .loginPage("/account/login")  // 우리가 만든 로그인 페이지를 사용해라
+                .usernameParameter("email")  // username의 디폴트는 username 이므로 email로 변경해라
+                .loginPage("/account/login")  // 우리가 만든 로그인 페이지를 사용해라  [GET 요청] 
+                .loginProcessingUrl("/account/login")  // 로그인 로직 (PrincipalDetailsService) [POST 요청]
+//                .failureHandler()
                 .defaultSuccessUrl("/index");  // (이전 페이지가 없을 경우) 로그인 성공시 접속되는 페이지
     }
 }

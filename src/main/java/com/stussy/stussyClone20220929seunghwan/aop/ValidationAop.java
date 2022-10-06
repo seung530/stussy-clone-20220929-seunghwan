@@ -7,10 +7,7 @@ import com.stussy.stussyClone20220929seunghwan.exception.CustomValidationExcepti
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -62,7 +59,10 @@ public class ValidationAop {
             });
 
             throw new CustomValidationException("Validation failed", errorMap);  // 강제로 예외 발생
-
         }
+    }
+    @AfterReturning(value = "pointcut()", returning = "returnObj")
+    public void afterReturn(JoinPoint joinPoint, Object returnObj) {
+        log.info("Validation success: {}", returnObj);
     }
 }

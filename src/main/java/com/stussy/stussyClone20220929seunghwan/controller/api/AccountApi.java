@@ -6,6 +6,8 @@ import com.stussy.stussyClone20220929seunghwan.aop.annotation.ValidAspect;
 import com.stussy.stussyClone20220929seunghwan.dto.CMRespDto;
 import com.stussy.stussyClone20220929seunghwan.dto.account.RegisterReqDto;
 import com.stussy.stussyClone20220929seunghwan.dto.validation.ValidationSequence;
+import com.stussy.stussyClone20220929seunghwan.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +26,25 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/api/account")
 @RestController
+@RequiredArgsConstructor
 public class AccountApi {
+
+    private final AccountService accountService;
 
     @LogAspect
     @ValidAspect
     @PostMapping("/register")      // ResisterReqDto 기준으로 Validation검사 진행 후, BindingResult를 결과로 가져온다.
-    public ResponseEntity<?> register(@Validated(ValidationSequence.class) @RequestBody RegisterReqDto registerReqDto, BindingResult bindingResult) {
+    public ResponseEntity<?> register(@Validated(ValidationSequence.class) @RequestBody RegisterReqDto registerReqDto, BindingResult bindingResult) throws Exception {
                                                                                                     // validation 체크를 하면 bindingResult가 따라온다.
+        accountService.checkDuplicateEmail(registerReqDto.getEmail());
+
+        accountService.register(registerReqDto);
+
+        return ResponseEntity.ok().body(new CMRespDto<>(1, "Successfully registered", registerReqDto));
+    }
+}
+
+
 
         // 유효성 검사
 //        if(bindingResult.hasErrors()) {
@@ -86,6 +100,3 @@ public class AccountApi {
 //    }
 
 //    public ResponseEntity<?> login() {
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
-    }
-}
