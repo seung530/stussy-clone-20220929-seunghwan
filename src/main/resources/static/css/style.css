@@ -12,7 +12,7 @@ body, html {
     margin: 0;    
 }
 
-input {
+input, select, textarea {
     border: 1px solid rgb(198, 198, 198);
     padding: 10px;
     margin-bottom: 15px;
@@ -20,7 +20,7 @@ input {
     width: 100%;
 }
 
-input:focus {
+input:focus, select:focus, textarea:focus{
     border: 1px solid black;
     outline: none;
 }
@@ -110,4 +110,8 @@ ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
+}
+
+main {
+    margin-top: 60px;
 }

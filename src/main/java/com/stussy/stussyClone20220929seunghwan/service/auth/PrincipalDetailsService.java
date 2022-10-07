@@ -1,4 +1,4 @@
-package com.stussy.stussyClone20220929seunghwan.service;
+package com.stussy.stussyClone20220929seunghwan.service.auth;
 
 import com.stussy.stussyClone20220929seunghwan.domain.User;
 import com.stussy.stussyClone20220929seunghwan.repository.AccountRepository;
@@ -26,7 +26,6 @@ public class PrincipalDetailsService implements UserDetailsService {
 
         log.info("email >> {}", email);
 
-
-        return null;
+        return new PrincipalDetails(user);
     }
 }
