@@ -135,4 +135,54 @@
 
     </select>
 
+    <update id="setProduct" parameterType="com.stussy.stussyClone20220929seunghwan.domain.Product">
+        update
+            product_mst
+        set
+            price = #{price},
+            color = #{color},
+            size = #{size},
+            info_simple = #{info_simple},
+            info_detail = #{info_detail},
+            info_option = #{info_option},
+            info_management = #{info_management},
+            info_shipping = #{info_shipping},
+            update_date = now()
+        where
+            id = #{id}
+    </update>
+
+    <delete id="deleteImgFiles" parameterType="hashmap">
+        delete
+        from
+            product_img
+        where
+            product_id = #{productId}
+        and temp_name in
+        <foreach collection="deleteImgFiles" item="temp_name" open="(" separator="," close=")">
+            #{temp_name}
+        </foreach>
+    </delete>
+
+    <select id="getProductImgList" parameterType="Integer" resultMap="product_img_files">
+        select
+            id,
+            product_id,
+            origin_name,
+            temp_name
+        from
+            product_img
+        where
+            product_id = #{productId}
+    </select>
+
+    <delete id="deleteProduct" parameterType="Integer">
+        delete
+        from
+            product_mst
+        where
+            id = #{productId}
+    </delete>
+
+
 </mapper>

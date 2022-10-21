@@ -4,6 +4,7 @@ import com.stussy.stussyClone20220929seunghwan.domain.Product;
 import com.stussy.stussyClone20220929seunghwan.domain.ProductImgFile;
 import com.stussy.stussyClone20220929seunghwan.dto.admin.ProductAdditionReqDto;
 import com.stussy.stussyClone20220929seunghwan.dto.admin.ProductListRespDto;
+import com.stussy.stussyClone20220929seunghwan.dto.admin.ProductModificationReqDto;
 import com.stussy.stussyClone20220929seunghwan.exception.CustomInternalServerErrorException;
 import com.stussy.stussyClone20220929seunghwan.exception.CustomValidationException;
 import com.stussy.stussyClone20220929seunghwan.repository.admin.ProductRepository;
@@ -18,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.LongStream;
 
 @Service
 @RequiredArgsConstructor
@@ -58,10 +60,10 @@ public class ProductServiceImpl implements ProductService{
 
         files.forEach(file -> {
             String originName = file.getOriginalFilename();
-            String extension = originName.substring(originName.lastIndexOf("."));  // 확장자 들고오기
-            String tempName = UUID.randomUUID().toString() + extension;
+            String extension = originName.substring(originName.lastIndexOf("."));
+            String temp_name = UUID.randomUUID().toString() + extension;
 
-            Path uploadPath = Paths.get(filePath + "/product/" + tempName);
+            Path uploadPath = Paths.get(filePath + "/product/" + temp_name);
 
             File f = new File(filePath + "/product");
             if(!f.exists()) {
@@ -77,8 +79,9 @@ public class ProductServiceImpl implements ProductService{
             ProductImgFile productImgFile = ProductImgFile.builder()
                     .product_id(productId)
                     .origin_name(originName)
-                    .temp_name(tempName)
+                    .temp_name(temp_name)
                     .build();
+
             productImgFiles.add(productImgFile);
         });
 
@@ -101,4 +104,82 @@ public class ProductServiceImpl implements ProductService{
         return list;
     }
 
+    @Override
+    public boolean updateProduct(ProductModificationReqDto productModificationReqDto) throws Exception {
+
+        boolean status =false;
+
+        int result = productRepository.setProduct(productModificationReqDto.toProductEntity());
+
+        if(result != 0) {
+            status = true;
+            boolean insertStatus = true;
+            boolean deleteStatus = true;
+
+            if(productModificationReqDto.getFiles() != null) {
+                insertStatus = insertProductImg(productModificationReqDto.getFiles(), productModificationReqDto.getId());
+            }
+
+            if(productModificationReqDto.getDeleteImgFiles() != null) {
+                deleteStatus = deleteProductImg(productModificationReqDto.getDeleteImgFiles(), productModificationReqDto.getId());
+            }
+
+            status = status && insertStatus && deleteStatus;
+            if (status == false) {
+                throw new CustomInternalServerErrorException("상품 수정 오류");
+            }
+        }
+
+        return status;
+    }
+
+    private boolean insertProductImg(List<MultipartFile> files, int productId) throws Exception {
+        boolean status = false;
+
+        List<ProductImgFile> productImgFiles = getProductImgFiles(files, productId);
+
+        return productRepository.saveImgFiles(productImgFiles) > 0;
+    }
+
+    private boolean deleteProductImg(List<String> deleteImgFiles, int productId) throws Exception {
+        boolean status = false;
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("productId", productId);
+        map.put("deleteImgFiles", deleteImgFiles);
+
+        int result = productRepository.deleteImgFiles(map);
+        if(result != 0) {
+            deleteImgFiles.forEach(temp_name -> {
+                Path uploadPath = Paths.get(filePath + "/product/" + temp_name);
+
+                File file = new File(uploadPath.toUri());
+                if(file.exists()) {
+                    file.delete();
+                }
+            });
+            status = true;
+        }
+
+        return status;
+    }
+
+    @Override
+    public boolean deleteProduct(int productId) throws Exception {
+
+        List<ProductImgFile> productImgFiles = productRepository.getProductImgList(productId);
+
+        if(productRepository.deleteProduct(productId) > 0) {
+            productImgFiles.forEach(productImgFile -> {
+                Path uploadPath = Paths.get(filePath + "/product/" + productImgFile.getTemp_name());
+
+                File file = new File(uploadPath.toUri());
+                if(file.exists()) {
+                    file.delete();
+                }
+            });
+            return true;
+        }
+        return false;
+    }
 }
