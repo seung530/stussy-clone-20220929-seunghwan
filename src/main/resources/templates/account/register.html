@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragment/head :: head}">
-    
+<head th:replace="~{fragment/head :: head}"></head>
+<head>
     <link rel="stylesheet" href="/static/css/account.css">
     <title>Create Account</title>
-    
 </head>
 <body>
     <div id="container">
-
-        <!-- header 영역 -->
         <header th:replace="~{fragment/header :: header}"></header>
-        
-        <!-- main 영역 -->
         <main>
             <div class="login">
                 <h1 class="login-title">ACCOUNT</h1>
@@ -40,13 +35,8 @@
                 </div>
             </div>
         </main>
-        
-        <!-- footer 영역 -->
         <footer>
-
-
         </footer>
-
     </div>
     <script src="/static/js/register.js"></script>
 </body>

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/header.css">
 </head>
 <body>
     <header th:fragment="header">
@@ -10,7 +8,7 @@
             <div class="header-flex">
                 <div class="header-left-container">
                     <div class="logo-container">
-                        <img class="site-logo" src="/static/images/logo/site_logo.png" alt="site_logo">
+                        <img class="site-logo" src="/static/images/logo/site_logo.PNG" alt="site_logo">
                     </div>
                     <div class="menu-container">
                         <div class="site-nav-menu">
@@ -18,15 +16,13 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="header-right-container">
                     <button class="site-header-button">SEARCH</button>
-                    <button class="site-header-button">BAG(<span class="bag-count">1</span>)</button>
-                    <button class="site-header-button"><img class="korea-img" src="/static/images/logo/korea_img.png" alt="korea"></button>
+                    <button class="site-header-button">BAG(<span class="bac-count">1</span>)</button>
+                    <button class="site-header-button"><img class="korea-img" src="/static/images/logo/korea_img.PNG" alt="korea"></button>
                 </div>
             </div>
         </div>
-
         <nav class="nav-invisible">
             <div class="site-nav-mega">
                 <a href="/collections/new-arrivals" class="site-nav-child-link">NEW</a>
@@ -52,6 +48,5 @@
         </nav>
         <script src="/static/js/header.js"></script>
     </header>
-    
 </body>
 </html>
