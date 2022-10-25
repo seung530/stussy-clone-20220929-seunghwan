@@ -16,8 +16,8 @@ public class LogAop {
     @Pointcut("@annotation(com.stussy.stussyClone20220929seunghwan.aop.annotation.LogAspect)")
     private void annotationPointcut() {}
 
-    @Pointcut("execution(* com.stussy.stussyClone20220929seunghwan.controller.api.*.*(..))")
-    private void executionPointCut() {}
+//    @Pointcut("execution(* com.stussy.stussyClone20220929seunghwan.controller.api.*.*(..))")
+//    private void executionPointCut() {}
 
     @Around("annotationPointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -31,7 +31,7 @@ public class LogAop {
 
         for(int i = 0; i < args.length; i++) {
             argNameString.append(argNames[i]);
-            argNameString.append(args[i].toString());
+            argDataString.append(args[i].toString());
 
             if(i < args.length - 1) {
                 argNameString.append(", ");
