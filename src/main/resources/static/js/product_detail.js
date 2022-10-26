@@ -68,6 +68,15 @@ class ProductDetailService {
         const managementInfo = document.querySelector(".management-info");
         const shippingInfo = document.querySelector(".shipping-info");
 
+        /* input hidden */
+        const h_groupId = document.querySelector("#group-id");
+        const h_productName = document.querySelector("#product-name");
+        const h_productPrice = document.querySelector("#product-price");
+
+        h_groupId.value = responseData.groupId;
+        h_productName.value = responseData.name;
+        h_productPrice.value = responseData.price;
+
         productTitle.textContent = responseData.name;
         productPrice.textContent = responseData.price;
 
@@ -97,7 +106,7 @@ ${responseData.infoDetail}`;
                 productSize.innerHTML = "";
                 entry[1].forEach((size, index) => {
                     productSize.innerHTML += `
-                        <input class="size-radios" type="radio" id="size-${size}" name="size-group" ${index == 0 ? "checked" : ""}>
+                        <input class="size-radios" type="radio" id="size-${size}" name="productSize" value="${size}" ${index == 0 ? "checked" : ""}>
                         <label class="size-buttons" for="size-${size}">${size}</label>
                     `;
                 });
@@ -111,7 +120,7 @@ ${responseData.infoDetail}`;
                     productSize.innerHTML = "";
                     entry[1].forEach((size, index) => {
                         productSize.innerHTML += `
-                            <input class="size-radios" type="radio" id="size-${size}" name="size-group" ${index == 0 ? "checked" : ""}>
+                            <input class="size-radios" type="radio" id="size-${size}" name="productSize" value="${size}" ${index == 0 ? "checked" : ""}>
                             <label class="size-buttons" for="size-${size}">${size}</label>
                         `;
                     });
