@@ -1,5 +1,6 @@
 package com.stussy.stussyClone20220929seunghwan.service;
 
+import com.stussy.stussyClone20220929seunghwan.domain.ProductDetail;
 import com.stussy.stussyClone20220929seunghwan.dto.shop.CollectionListRespDto;
 import com.stussy.stussyClone20220929seunghwan.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,18 @@ public class ShopServiceImpl implements ShopService{
         });
 
         return responses;
+    }
+
+    @Override
+    public List<?> getProductDetails(int groupId) throws Exception {
+        List<ProductDetail> productDetails = shopRepository.getProduct(groupId);
+        List<String> colors = new ArrayList<String>();
+        Map<String, List<String>> sizes = new HashMap<String, List<String>>();
+
+        productDetails.forEach(productDetail -> {
+            colors.add(productDetail.getColor());
+        });
+
+        return shopRepository.getProduct(groupId);
     }
 }
